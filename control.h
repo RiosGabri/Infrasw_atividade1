@@ -20,5 +20,6 @@ typedef struct {
 
 void job_init(void);
 int job_add(pid_t pid, const char *command);
+process* job_find(int id);
 
 #endif

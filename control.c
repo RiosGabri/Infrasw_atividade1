@@ -19,10 +19,21 @@ int job_add(pid_t pid, const char *command) {
             processo[i].ID = next_id++;
             processo[i].pid = pid;
             strncpy(processo[i].command, command, 255);
+            processo[i].command[255] = '\0';
             processo[i].estado = funcionando;
+            processo[i].saida = -1; 
             processo[i].uso = 1;
             return processo[i].ID;
         }
     }
     return -1;
+}
+
+process* job_find(int id) {
+    for (int i = 0; i < MAX_PROCESS; i++) {
+        if (processo[i].uso && processo[i].ID == id) {
+            return &processo[i];
+        }
+    }
+    return NULL;
 }
