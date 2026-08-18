@@ -15,6 +15,10 @@ typedef struct {
     char command[256];
     state estado;
     int saida;
+    int uso;
 } process;
+
+void job_init(void);
+int job_add(pid_t pid, const char *command);
 
 #endif

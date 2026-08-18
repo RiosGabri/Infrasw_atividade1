@@ -1,14 +1,23 @@
-#ifdef TASK_H
+#ifndef TASK_H
 #define TASK_H
 
 #define MAX_NOME 64
 #define MAX_ARGS 64
 #define MAX_PATH 256
+#define MAX_TASKS 100
 
 typedef struct Task{
     char nome[MAX_NOME];
     char programa[MAX_PATH];
     char *args[MAX_ARGS];
+    char input_file[MAX_PATH];  
+    char output_file[MAX_PATH]; 
+    int append_mode;
 } Task;
 
-#endif 
+void task_init(void);
+int task_add(const char *name, const char *program, char **args, int argc);
+/*Task* task_find(const char *name);
+int task_set_input(const char *name, const char *filename);
+int task_set_output(const char *name, const char *filename, int append_mode);*/
+#endif
