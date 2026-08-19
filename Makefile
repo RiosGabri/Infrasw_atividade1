@@ -3,14 +3,14 @@ CFLAGS = -Wall -Wextra -std=c99 -g
 LDFLAGS = 
 
 TARGET = processflow
-OBJECTS = processflow.o control.o task.o parser.o
+OBJECTS = processflow.o control.o task.o parser.o execution.o
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-processflow.o: processflow.c control.h task.h parser.h
+processflow.o: processflow.c control.h task.h parser.h execution.h
 	$(CC) $(CFLAGS) -c processflow.c
 
 control.o: control.c control.h
@@ -21,6 +21,9 @@ task.o: task.c task.h
 
 parser.o: parser.c parser.h
 	$(CC) $(CFLAGS) -c parser.c
+
+execution.o: execution.c execution.h task.h
+	$(CC) $(CFLAGS) -c execution.c
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)

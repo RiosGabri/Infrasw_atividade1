@@ -8,6 +8,7 @@ grp/
 |-- task.c/task.h -> criação e gerenciamento das tarefas cadastradas
 |-- control.c/control.h -> controle dos processos e jobs executados
 |-- parser.c/parser.h -> interpretar os comandos digitados pelo usuário ou lidos de um arquivo .pf.
+|-- execution.c/execution.h ->  clonar o processo pai com fork, carregar execvpe fim com waitpid 
 |-- evidencias.log
 |-- makefile
 |-- readme
