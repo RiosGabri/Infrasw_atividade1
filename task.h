@@ -13,7 +13,7 @@ typedef struct Task{
     char input_file[MAX_PATH];  
     char output_file[MAX_PATH]; 
     int append_mode;
-    int uso; /* 0 = slot livre, 1 = ocupado -- mesma convencao de control.h */
+    int uso;
 } Task;
 
 void task_init(void);
