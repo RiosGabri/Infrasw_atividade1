@@ -1,10 +1,13 @@
 # Arquitetura:
 
 ```
+Esta arquitetura se refere a como ficará o .tar para a entrega no classroom
 grp/
 |
-|-- processflow.C
-|-- processflow.h
+|-- processflow.C -> coordena o funcionamento do sistema e recebe os comandos
+|-- task.c/task.h -> criação e gerenciamento das tarefas cadastradas
+|-- control.c/control.h -> controle dos processos e jobs executados
+|-- parser.c/parser.h -> interpretar os comandos digitados pelo usuário ou lidos de um arquivo .pf.
 |-- evidencias.log
 |-- makefile
 |-- readme
@@ -15,8 +18,9 @@ relatório será em .pdf  e mandar tudo para o classroom junto do link p/ classr
 ```
 
 ```
-No terminal, coloco:cd ~/GRP/Infrasw_atividade1 
-     -script -a ../evidencias.log
+No terminal, coloco:
+     - cd ~/GRP/Infrasw_atividade1 
+     - script -a ../evidencias.log
      - gcc -Wall -Wextra -std=c11 processflow.c -o processflow
      - echo "Testeterminal" | ./processflow
      - exit (grava e finaliza o script)
