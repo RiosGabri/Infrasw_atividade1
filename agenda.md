@@ -15,6 +15,15 @@ relatório será em .pdf  e mandar tudo para o classroom junto do link p/ classr
 ```
 
 ```
+No terminal, coloco:cd ~/GRP/Infrasw_atividade1 
+     -script -a ../evidencias.log
+     - gcc -Wall -Wextra -std=c11 processflow.c -o processflow
+     - echo "Testeterminal" | ./processflow
+     - exit (grava e finaliza o script)
+     - Repete o primeiro quando voltar p/ IDE
+     - Repete o segundo p/ iniciar o script
+
+```
 -Terça 18/08:
    -task -> molde das tarefas = cadastro de tarefa + guardar na memória
         -nome: Apelido dos comandos, programa: executável e argv: argumento
