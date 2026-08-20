@@ -5,7 +5,7 @@
 #include "task.h"
 
 static Task tasks[MAX_TASKS];
-static int task_count = 0;
+//static int task_count = 0;
 
 void task_init(void) {
     for (int i = 0; i < MAX_TASKS; i++) {

@@ -73,5 +73,27 @@ int main(void) {
     run_sequential(seq_tasks, 2);
     printf("\nrun_sequential finalizado.\n");
 
+    printf("\n--- TESTES DA ETAPA 4 (PARALLEL E PIPE) ---\n");
+
+    // Cadastrando tarefas extras para os testes
+    char *args_echo[] = {"/bin/echo", "ola mundo pipe", NULL};
+    task_add("falar_pipe", "/bin/echo", args_echo, 2);
+    
+    char *args_wc[] = {"/usr/bin/wc", "-w", NULL};
+    task_add("contar", "/usr/bin/wc", args_wc, 2);
+
+    // TESTE 10 -> run_parallel
+    printf("Executando tarefas em paralelo (run_parallel 'listar' e 'falar_pipe'):\n");
+    char *par_tasks[] = {"listar", "falar_pipe"};
+    run_parallel(par_tasks, 2);
+    printf("run_parallel finalizado.\n");
+
+    // TESTE 11 -> run_pipe
+    printf("\nExecutando tarefas com pipe (run_pipe 'falar_pipe' | 'contar'):\n");
+    // O echo vai mandar "ola mundo pipe" (3 palavras) e o wc -w vai contar. A saída na tela deve ser "3".
+    char *pipe_tasks[] = {"falar_pipe", "contar"};
+    run_pipe(pipe_tasks, 2);
+    printf("run_pipe finalizado.\n");
+
     return 0;
 }
