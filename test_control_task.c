@@ -1,22 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "control.h"
 #include "task.h"
+#include "execution.h"
+#include "parser.h"
 
 int main(void) {
     task_init();
     job_init();
 
-    //TESTE 1 -> task_add: caso normal 
+    printf("--- TESTES DE TASK E JOB ---\n");
+    // TESTE 1 -> task_add: caso normal 
     char *args1[] = {"/bin/ls", "-l", NULL};
     int r1 = task_add("listar", "/bin/ls", args1, 2);
     printf("task_add(listar) -> %d (esperado 0)\n", r1);
 
-    //TESTE 2 -> deve achar 
+    // TESTE 2 -> deve achar 
     Task *t = task_find("listar");
     printf("task_find(listar) -> %s (esperado != NULL), programa=%s\n",
            t ? "achou" : "NULL", t ? t->programa : "-");
 
-    //TESTE 3 -> nome duplicado
+    // TESTE 3 -> nome duplicado
     int r2 = task_add("listar", "/bin/ls", args1, 2);
     printf("task_add(listar) duplicado -> %d (esperado -1)\n", r2);
 
@@ -40,6 +44,34 @@ int main(void) {
     // TESTE 6 ->id inexistente 
     process *p2 = job_find(999);
     printf("job_find(999) -> %s (esperado NULL)\n", p2 ? "achou (ERRO)" : "NULL");
+
+    printf("\n--- TESTES DO PARSER ---\n");
+    // TESTE 7 -> Testando a separação de strings
+    char linha_teste[] = "  task   echo   /bin/echo ola mundo  \n";
+    parsedLine p_line;
+    int parsed = parse(linha_teste, &p_line);
+    printf("parse() -> retornou %d (esperado 1)\n", parsed);
+    printf("argc = %d (esperado 5)\n", p_line.argc);
+    if (parsed) {
+        for (int i = 0; i < p_line.argc; i++) {
+            printf("argv[%d] = '%s'\n", i, p_line.argv[i]);
+        }
+    }
+
+    printf("\n--- TESTES DE EXECUCAO ---\n");
+    // TESTE 8 -> execute_task isolado
+    printf("Executando a tarefa 'listar' (execute_task):\n");
+    int exec_code = execute_task("listar");
+    printf("\nexecute_task() finalizado com codigo: %d (esperado 0)\n", exec_code);
+
+    // TESTE 9 -> run_sequential
+    char *args2[] = {"/bin/echo", "Testando o comando echo", NULL};
+    task_add("falar", "/bin/echo", args2, 2);
+    
+    printf("\nExecutando tarefas em sequencia (run_sequential 'listar' e 'falar'):\n");
+    char *seq_tasks[] = {"listar", "falar"};
+    run_sequential(seq_tasks, 2);
+    printf("\nrun_sequential finalizado.\n");
 
     return 0;
 }
