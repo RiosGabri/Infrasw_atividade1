@@ -13,22 +13,22 @@ void task_init(void) {
     }
 }
 
-Task* task_find(const char *name) {
+Task* task_find(const char *nome) {
     for (int i = 0; i < MAX_TASKS; i++) {
-        if (tasks[i].uso && strcmp(tasks[i].nome, name) == 0) {
+        if (tasks[i].uso && strcmp(tasks[i].nome, nome) == 0) {
             return &tasks[i];
         }
     }
     return NULL;
 }
 
-int task_add(const char *name, const char *program, char **args, int argc) {
-    if (task_find(name) != NULL) {
+int task_add(const char *nome, const char *program, char **args, int argc) {
+    if (task_find(nome) != NULL) {
         return -1;
     }
     for (int i = 0; i < MAX_TASKS; i++) {
         if (!tasks[i].uso) {
-            strncpy(tasks[i].nome, name, MAX_NOME - 1);
+            strncpy(tasks[i].nome, nome, MAX_NOME - 1);
             tasks[i].nome[MAX_NOME - 1] = '\0';
             strncpy(tasks[i].programa, program, MAX_PATH - 1);
             tasks[i].programa[MAX_PATH - 1] = '\0';
@@ -44,4 +44,21 @@ int task_add(const char *name, const char *program, char **args, int argc) {
         }
     }
     return -1;
+}
+
+int task_set_input(const char *nome, const char *filename) {
+    Task *t = task_find(nome);
+    if (t == NULL) return -1;
+    strncpy(t->input_file, filename, MAX_PATH - 1);
+    t->input_file[MAX_PATH - 1] = '\0';
+    return 0;
+}
+
+int task_set_output(const char *nome, const char *filename, int append_mode) {
+    Task *t = task_find(nome);
+    if (t == NULL) return -1;
+    strncpy(t->output_file, filename, MAX_PATH - 1);
+    t->output_file[MAX_PATH - 1] = '\0';
+    t->append_mode = append_mode;
+    return 0;
 }

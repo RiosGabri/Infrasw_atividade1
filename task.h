@@ -17,8 +17,8 @@ typedef struct Task{
 } Task;
 
 void task_init(void);
-int task_add(const char *name, const char *program, char **args, int argc);
-Task* task_find(const char *name);
-/*int task_set_input(const char *name, const char *filename);
-int task_set_output(const char *name, const char *filename, int append_mode);*/
+int task_add(const char *nome, const char *programa, char **args, int argc);
+Task* task_find(const char *noome);
+int task_set_input(const char *nome, const char *filename);
+int task_set_output(const char *nome, const char *filename, int append_mode);
 #endif

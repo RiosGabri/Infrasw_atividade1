@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h> 
 #include "execution.h"
 #include "task.h"
 
@@ -19,6 +20,27 @@ pid_t executar_task(const char *nome) {
         return -1;
     }
     if (pid == 0) {
+        if (t->input_file[0] != '\0') {
+            int fd_in = open(t->input_file, O_RDONLY);
+            if (fd_in >= 0) {
+                dup2(fd_in, STDIN_FILENO);
+                close(fd_in);
+            } else {
+                perror("erro ao abrir arquivo de entrada");
+                _exit(1);
+            }
+        }
+        if (t->output_file[0] != '\0') {
+            int flags = O_WRONLY | O_CREAT | (t->append_mode ? O_APPEND : O_TRUNC);
+            int fd_out = open(t->output_file, flags, 0644);
+            if (fd_out >= 0) {
+                dup2(fd_out, STDOUT_FILENO);
+                close(fd_out);
+            } else {
+                perror("erro ao abrir arquivo de saida");
+                _exit(1);
+            }
+        }
         execvp(t->programa, t->args);
         perror("nao foi possivel executar o programa");
         _exit(127); 

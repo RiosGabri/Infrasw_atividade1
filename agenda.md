@@ -34,3 +34,6 @@ No terminal, coloco:
         -nome: Apelido dos comandos, programa: executável e argv: argumento
    - control -> painel de controle + registro p/ não "bloquear o painel
         - identificação (id e pid) + Prevenção de processos zumbis + estado de controle para análise se processo ainda está acontecendo
+-Sexta 21/08:
+   -teste -> processflow> task falar/bin/echo ola mundo 20h38
+   -
