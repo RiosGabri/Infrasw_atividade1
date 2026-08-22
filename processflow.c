@@ -30,6 +30,9 @@ static void process_line(char *line) {
     else if (strcmp(cmd.argv[0], "append") == 0 && cmd.argc == 3) {
         task_set_output(cmd.argv[1], cmd.argv[2], 1);
     }
+    else if (strcmp(cmd.argv[0], "jobs") == 0) {
+        processo_print_all();
+    }
 }
 
 static void run_interactive(void) {
