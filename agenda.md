@@ -36,4 +36,5 @@ No terminal, coloco:
         - identificação (id e pid) + Prevenção de processos zumbis + estado de controle para análise se processo ainda está acontecendo
 -Sexta 21/08:
    -teste -> processflow> task falar/bin/echo ola mundo 20h38
-   -
+   - teste de input/append 22/08 15h37
+   -teste control.c/.h  22/08 16h05

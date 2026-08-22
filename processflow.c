@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
         return 1; 
     }
     task_init();
-    job_init();
+    processo_init();
  
     if (argc == 2) {
         run_workflow(argv[1]); 

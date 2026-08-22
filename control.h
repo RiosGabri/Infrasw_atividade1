@@ -18,8 +18,9 @@ typedef struct {
     int uso;
 } process;
 
-void job_init(void);
-int job_add(pid_t pid, const char *command);
-process* job_find(int id);
+void processo_init(void);
+int processo_add(pid_t pid, const char *command);
+process* processo_find(int id);
+void processo_print_all(void);
 
 #endif
