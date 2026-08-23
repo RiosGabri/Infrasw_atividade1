@@ -59,3 +59,26 @@ void processo_print_all(void) {
     }
     if (ativos == 0) printf("Nenhum processo em background rodando.\n");
 }
+
+int processo_wait(int id) {
+    process *p = processo_find(id);
+    if (p == NULL) {
+        return -1;
+    }
+    if (p->estado == finalizado) {
+        printf("[%d] PID %d - %s ja concluido (saida: %d)\n",
+               p->ID, p->pid, p->command, p->saida);
+        return 0;
+    }
+    int status;
+    if (waitpid(p->pid, &status, 0) < 0) {
+        perror("erro: waitpid falhou");
+        p->estado = falha;
+        return -1;
+    }
+    p->estado = finalizado;
+    p->saida = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+    printf("[%d] PID %d - %s (Concluido, saida: %d)\n",
+           p->ID, p->pid, p->command, p->saida);
+    return 0;
+}
