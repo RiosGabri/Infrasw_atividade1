@@ -11,43 +11,82 @@
 static void process_line(char *line) {
     parsedLine cmd;
     if (!parse(line, &cmd) || cmd.argc == 0) return;
-    if (strcmp(cmd.argv[0], "exit") == 0) {
+    const char *nome_cmd = cmd.argv[0];
+    if (strcmp(nome_cmd, "exit") == 0) {
         exit(0);
     }
-    else if (strcmp(cmd.argv[0], "task") == 0 && cmd.argc >= 3) {
-        task_add(cmd.argv[1], cmd.argv[2], &cmd.argv[2], cmd.argc - 2);
+    else if (strcmp(nome_cmd, "task") == 0) {
+        if (cmd.argc < 3) {
+            fprintf(stderr, "erro: uso: task <nome> <programa> [argumentos...]\n");
+        } else {
+            task_add(cmd.argv[1], cmd.argv[2], &cmd.argv[2], cmd.argc - 2);
+        }
     }
-    else if (strcmp(cmd.argv[0], "run") == 0 && cmd.argc >= 3) {
-        int num_tarefas = cmd.argc - 2;
-        if (strcmp(cmd.argv[1], "sequential") == 0) run_sequential(&cmd.argv[2], num_tarefas);
-        else if (strcmp(cmd.argv[1], "parallel") == 0) run_parallel(&cmd.argv[2], num_tarefas);
-        else if (strcmp(cmd.argv[1], "pipe") == 0) run_pipe(&cmd.argv[2], num_tarefas);
+    else if (strcmp(nome_cmd, "run") == 0) {
+        if (cmd.argc < 3) {
+            fprintf(stderr, "erro: uso: run <sequential|parallel|pipe> <tarefa...>\n");
+        } else {
+            int num_tarefas = cmd.argc - 2;
+            const char *modo = cmd.argv[1];
+            if (strcmp(modo, "sequential") == 0) run_sequential(&cmd.argv[2], num_tarefas);
+            else if (strcmp(modo, "parallel") == 0) run_parallel(&cmd.argv[2], num_tarefas);
+            else if (strcmp(modo, "pipe") == 0) run_pipe(&cmd.argv[2], num_tarefas);
+            else fprintf(stderr, "erro: modo de run desconhecido: %s\n", modo);
+        }
     }
-    else if (strcmp(cmd.argv[0], "input") == 0 && cmd.argc == 3) {
-        task_set_input(cmd.argv[1], cmd.argv[2]);
+    else if (strcmp(nome_cmd, "input") == 0) {
+        if (cmd.argc != 3) {
+            fprintf(stderr, "erro: uso: input <tarefa> <arquivo>\n");
+        } else if (task_set_input(cmd.argv[1], cmd.argv[2]) != 0) {
+            fprintf(stderr, "erro: tarefa '%s' nao encontrada\n", cmd.argv[1]);
+        }
     }
-    else if (strcmp(cmd.argv[0], "output") == 0 && cmd.argc == 3) {
-        task_set_output(cmd.argv[1], cmd.argv[2], 0);
+    else if (strcmp(nome_cmd, "output") == 0) {
+        if (cmd.argc != 3) {
+            fprintf(stderr, "erro: uso: output <tarefa> <arquivo>\n");
+        } else if (task_set_output(cmd.argv[1], cmd.argv[2], 0) != 0) {
+            fprintf(stderr, "erro: tarefa '%s' nao encontrada\n", cmd.argv[1]);
+        }
     }
-    else if (strcmp(cmd.argv[0], "append") == 0 && cmd.argc == 3) {
-        task_set_output(cmd.argv[1], cmd.argv[2], 1);
+    else if (strcmp(nome_cmd, "append") == 0) {
+        if (cmd.argc != 3) {
+            fprintf(stderr, "erro: uso: append <tarefa> <arquivo>\n");
+        } else if (task_set_output(cmd.argv[1], cmd.argv[2], 1) != 0) {
+            fprintf(stderr, "erro: tarefa '%s' nao encontrada\n", cmd.argv[1]);
+        }
     }
-    else if (strcmp(cmd.argv[0], "jobs") == 0) {
+    else if (strcmp(nome_cmd, "jobs") == 0) {
         processo_print_all();
     }
-    else if (strcmp(cmd.argv[0], "workdir") == 0 && cmd.argc == 2) {
-        if (chdir(cmd.argv[1]) != 0) {
-            perror("nao foi possivel mudar de diretorio");
+    else if (strcmp(nome_cmd, "workdir") == 0) {
+        if (cmd.argc != 2) {
+            fprintf(stderr, "erro: uso: workdir <diretorio>\n");
+        } else if (chdir(cmd.argv[1]) != 0) {
+            perror("erro: nao foi possivel mudar de diretorio");
         }
     }
-    else if (strcmp(cmd.argv[0], "start") == 0 && cmd.argc == 2) {
-        run_background(cmd.argv[1]);
-    }
-    else if (strcmp(cmd.argv[0], "wait") == 0 && cmd.argc == 2) {
-        int id = atoi(cmd.argv[1]);
-        if (processo_wait(id) < 0) {
-            fprintf(stderr, "erro: processo %d nao encontrado\n", id);
+    else if (strcmp(nome_cmd, "start") == 0) {
+        if (cmd.argc != 2) {
+            fprintf(stderr, "erro: uso: start <tarefa>\n");
+        } else {
+            run_background(cmd.argv[1]);
         }
+    }
+    else if (strcmp(nome_cmd, "wait") == 0) {
+        if (cmd.argc != 2) {
+            fprintf(stderr, "erro: uso: wait <jobId>\n");
+        } else {
+            char *endptr;
+            long id = strtol(cmd.argv[1], &endptr, 10);
+            if (*endptr != '\0' || endptr == cmd.argv[1]) {
+                fprintf(stderr, "erro: jobId invalido: %s\n", cmd.argv[1]);
+            } else if (processo_wait((int)id) < 0) {
+                fprintf(stderr, "erro: job %ld nao encontrado\n", id);
+            }
+        }
+    }
+    else {
+        fprintf(stderr, "erro: comando desconhecido: %s\n", nome_cmd);
     }
 }
 
@@ -78,7 +117,7 @@ static void run_workflow(const char *filepath) {
         if (nread == 0 || line[nread - 1] != '\n') printf("\n");
         process_line(line);
     }
-    fprintf(stderr, "workflow terminou sem comando exit\n");
+    fprintf(stderr, "aviso: workflow terminou sem comando exit\n");
 
     free(line);
     fclose(fp);

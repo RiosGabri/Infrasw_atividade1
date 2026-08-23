@@ -7,7 +7,7 @@
 
 int main(void) {
     task_init();
-    job_init();
+    processo_init();
 
     printf("--- TESTES DE TASK E JOB ---\n");
     // TESTE 1 -> task_add: caso normal 
@@ -28,12 +28,12 @@ int main(void) {
     Task *t2 = task_find("naoexiste");
     printf("task_find(naoexiste) -> %s (esperado NULL)\n", t2 ? "achou (ERRO)" : "NULL");
 
-    // TESTE 5 -> job_add + job_find 
-    int jid = job_add(1234, "listar");
-    printf("job_add -> ID=%d (esperado 1)\n", jid);
+    // TESTE 5 -> processo_add + processo_find 
+    int jid = processo_add(1234, "listar");
+    printf("processo_add -> ID=%d (esperado 1)\n", jid);
 
-    process *p = job_find(jid);
-    printf("job_find(%d) -> %s", jid, p ? "achou" : "NULL");
+    process *p = processo_find(jid);
+    printf("processo_find(%d) -> %s", jid, p ? "achou" : "NULL");
     if (p) {
         printf(", pid=%d, command=%s, estado=%d, saida=%d (esperado saida=-1)\n",
                p->pid, p->command, p->estado, p->saida);
@@ -42,8 +42,8 @@ int main(void) {
     }
 
     // TESTE 6 ->id inexistente 
-    process *p2 = job_find(999);
-    printf("job_find(999) -> %s (esperado NULL)\n", p2 ? "achou (ERRO)" : "NULL");
+    process *p2 = processo_find(999);
+    printf("processo_find(999) -> %s (esperado NULL)\n", p2 ? "achou (ERRO)" : "NULL");
 
     printf("\n--- TESTES DO PARSER ---\n");
     // TESTE 7 -> Testando a separação de strings
