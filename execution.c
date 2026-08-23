@@ -6,6 +6,7 @@
 #include <fcntl.h> 
 #include "execution.h"
 #include "task.h"
+#include "control.h"
 
 pid_t executar_task(const char *nome) {
     Task *t = task_find(nome);
@@ -43,9 +44,9 @@ pid_t executar_task(const char *nome) {
         }
         execvp(t->programa, t->args);
         perror("nao foi possivel executar o programa");
-        _exit(127); 
+        _exit(127);
     }
-    return pid; 
+    return pid;
 }
 
 int wait_task(pid_t pid) {
@@ -80,7 +81,7 @@ void run_sequential(char **nomes, int count) {
 
 void run_parallel(char **nomes, int count) {
     pid_t pids[count];
-    char *validos[count]; 
+    char *validos[count];
     int n_validos = 0;
     for (int i = 0; i < count; i++) {
         pid_t pid = executar_task(nomes[i]);
@@ -125,7 +126,7 @@ void run_pipe(char **nomes, int count) {
     }
     pid_t pids[count];
     for (int i = 0; i < count; i++) {
-        Task *t = task_find(nomes[i]); 
+        Task *t = task_find(nomes[i]);
         pid_t pid = fork();
         if (pid < 0) {
             perror("fork falhou");
@@ -154,11 +155,19 @@ void run_pipe(char **nomes, int count) {
         close(pipefds[i][1]);
     }
     for (int i = 0; i < count; i++) {
-        if (pids[i] < 0) continue; 
+        if (pids[i] < 0) continue;
         int exit_code = wait_task(pids[i]);
         if (exit_code != 0) {
             fprintf(stderr, "tarefa '%s' (pipe) terminou com codigo %d\n",
                     nomes[i], exit_code);
         }
+    }
+}
+
+void run_background(const char *nome) {
+    pid_t pid = executar_task(nome);
+    if (pid > 0) {
+        int id = processo_add(pid, nome);
+        printf("[%d] %d\n", id, pid);
     }
 }

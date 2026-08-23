@@ -39,3 +39,4 @@ No terminal, coloco:
    - teste de input/append 22/08 15h37
    -teste control.c/.h  22/08 16h05
    - teste control.c/.h  22/08 22h04
+   -teste execution.c/.h 22/08 22h18

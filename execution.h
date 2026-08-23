@@ -9,5 +9,6 @@ int execute_task(const char *nome);
 void run_sequential(char **nomes, int count);
 void run_parallel(char **nomes, int count);
 void run_pipe(char **nomes, int count);
+void run_background(const char *nome);
 
 #endif
