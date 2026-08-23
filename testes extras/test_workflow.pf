@@ -1,0 +1,9 @@
+task dormir /bin/sleep 2
+start dormir
+jobs
+wait 1
+jobs
+workdir /tmp
+task listar /bin/pwd
+run sequential listar
+exit

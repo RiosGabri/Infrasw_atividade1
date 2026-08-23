@@ -1,6 +1,8 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "parser.h"
 #include "task.h"
 #include "control.h"
@@ -33,6 +35,20 @@ static void process_line(char *line) {
     else if (strcmp(cmd.argv[0], "jobs") == 0) {
         processo_print_all();
     }
+    else if (strcmp(cmd.argv[0], "workdir") == 0 && cmd.argc == 2) {
+        if (chdir(cmd.argv[1]) != 0) {
+            perror("nao foi possivel mudar de diretorio");
+        }
+    }
+    else if (strcmp(cmd.argv[0], "start") == 0 && cmd.argc == 2) {
+        run_background(cmd.argv[1]);
+    }
+    else if (strcmp(cmd.argv[0], "wait") == 0 && cmd.argc == 2) {
+        int id = atoi(cmd.argv[1]);
+        if (processo_wait(id) < 0) {
+            fprintf(stderr, "erro: processo %d nao encontrado\n", id);
+        }
+    }
 }
 
 static void run_interactive(void) {
@@ -55,9 +71,15 @@ static void run_workflow(const char *filepath) {
     }
     char *line = NULL;
     size_t len = 0;
-    while (getline(&line, &len, fp) != -1) {
+    ssize_t nread;
+
+    while ((nread = getline(&line, &len, fp)) != -1) {
+        printf("%s", line); 
+        if (nread == 0 || line[nread - 1] != '\n') printf("\n");
         process_line(line);
     }
+    fprintf(stderr, "workflow terminou sem comando exit\n");
+
     free(line);
     fclose(fp);
 }
