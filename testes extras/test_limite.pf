@@ -1,0 +1,7 @@
+task t1 /bin/echo "cinco quatro tres dois um"
+task t2 /usr/bin/cat
+task t3 /usr/bin/sort
+task t4 /usr/bin/uniq
+task t5 /usr/bin/wc -w
+run pipe t1 t2 t3 t4 t5
+exit

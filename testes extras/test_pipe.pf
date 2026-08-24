@@ -1,0 +1,4 @@
+task t_echo /bin/echo "Palavra1 Palavra2 Palavra3"
+task t_wc /usr/bin/wc -w
+run pipe t_echo t_wc
+exit

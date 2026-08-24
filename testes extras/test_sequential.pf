@@ -1,0 +1,5 @@
+task t1 /bin/echo "Etapa 1: Inicio"
+task t2 /bin/pwd
+task t3 /bin/echo "Etapa 3: Fim"
+run sequential t1 t2 t3
+exit

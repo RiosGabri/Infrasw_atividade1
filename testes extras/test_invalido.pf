@@ -1,0 +1,8 @@
+task t_fantasma /bin/comando_que_nao_existe
+run sequential t_fantasma
+run sequential tarefa_nunca_cadastrada
+task t_leitura /bin/cat
+input t_leitura /tmp/arquivo_q_nao_existe_123.txt
+run sequential t_leitura
+wait 9999
+exit

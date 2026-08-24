@@ -44,3 +44,8 @@ No terminal, coloco:
    - evidencias.log não registrou com exatidão, teste do terminal não registrado (registro no log atrasado)
    - teste processflow 23/08 14h32
    -teste processflow 15h05 - 15h10 teste do professor
+   - teste final workflow 24/08 16h26
+   - teste final sequencial 16h28
+   - teste final pipe 16h30
+   - teste background 16h31
+   - teste interativo 16h48

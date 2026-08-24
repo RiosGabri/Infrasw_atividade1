@@ -1,0 +1,6 @@
+task t_bg /bin/sleep 2
+start t_bg
+jobs
+wait 1
+jobs
+exit

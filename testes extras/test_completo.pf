@@ -1,0 +1,47 @@
+# --- 1. TESTE DE ERROS DE SINTAXE E COMANDOS INVALIDOS ---
+comando_que_nao_existe
+task
+run
+run modo_invalido tarefa1
+input
+input tarefa_fantasma entrada.txt
+output
+append
+workdir
+start
+wait
+wait texto_invalido
+wait 9999
+
+# --- 2. EXECUÇÃO SEQUENCIAL ---
+task t_echo /bin/echo "Iniciando testes no ProcessFlow"
+task t_pwd /bin/pwd
+run sequential t_echo t_pwd
+
+# --- 3. EXECUÇÃO EM BACKGROUND (start, jobs, wait) ---
+task t_sleep /bin/sleep 2
+start t_sleep
+jobs
+wait 1
+jobs
+
+# --- 4. REDIRECIONAMENTOS (output, append, input) ---
+task t_escrever /bin/echo "Linha 1 do arquivo"
+output t_escrever /tmp/teste_proc.txt
+run sequential t_escrever
+
+task t_anexar /bin/echo "Linha 2 anexada"
+append t_anexar /tmp/teste_proc.txt
+run sequential t_anexar
+
+task t_ler /bin/cat
+input t_ler /tmp/teste_proc.txt
+run sequential t_ler
+
+# --- 5. MUDANÇA DE DIRETÓRIO (workdir) ---
+workdir /tmp
+task t_pwd_tmp /bin/pwd
+run sequential t_pwd_tmp
+
+# --- 6. FINALIZAÇÃO ---
+exit

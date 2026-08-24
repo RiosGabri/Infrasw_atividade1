@@ -1,0 +1,3 @@
+task t_wf /bin/echo "Modo Workflow (.pf) funcionando com sucesso!"
+run sequential t_wf
+exit
